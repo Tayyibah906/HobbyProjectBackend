@@ -1,5 +1,56 @@
 package com.qa.hobby.persistence.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Universe {
 
+	@Id
+	@GeneratedValue
+	private Long id;
+
+	private String name;
+
+	@OneToMany(mappedBy = "comic")
+	private List<Comic> comics = new ArrayList<>();
+	
+	public Universe(String name) {
+		this.name = name;
+	}
+	
+	public Universe() {
+		
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<Comic> getComics() {
+		return comics;
+	}
+
+	public void setComics(List<Comic> comics) {
+		this.comics = comics;
+	}
+	
+	
 }
