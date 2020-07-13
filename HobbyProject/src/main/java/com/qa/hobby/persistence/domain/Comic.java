@@ -6,42 +6,41 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-
-@Entity
+@Entity(name = "comic")
 public class Comic {
-	
+
 	@Id
 	@GeneratedValue
 	private Long id;
 
-	@Column(name = "comic_title")
+	@Column(name = "comic_title", unique = false)
 	private String title;
-	
+
 	@Column
 	private String publisher;
-	
+
 	@Column
 	private String writer;
-	
+
 	@Column
 	private String coverArtist;
-	
-	@Column
+
+	@Column(nullable = false)
 	private int issue;
-	
+
 	@ManyToOne(targetEntity = Universe.class)
 	private Universe universe;
-	
+
+	public Comic() {
+
+	}
+
 	public Comic(String title, String writer, String publisher, String coverArtist, int issue) {
 		super();
 		this.title = title;
 		this.publisher = publisher;
 		this.coverArtist = coverArtist;
 		this.issue = issue;
-	}
-	
-	public Comic() {
-		
 	}
 
 	public Long getId() {
