@@ -1,10 +1,13 @@
 package com.qa.hobby.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.qa.hobby.dto.ComicDTO;
 import com.qa.hobby.exceptions.ComicNotFoundException;
 import com.qa.hobby.persistence.domain.Comic;
 import com.qa.hobby.persistence.repo.ComicRepo;
@@ -13,29 +16,42 @@ import com.qa.hobby.persistence.repo.ComicRepo;
 public class ComicService {
 	
 	private ComicRepo repo;
+	private ModelMapper mapper;
 	
-	public ComicService(ComicRepo repo) {
+	public ComicService(ComicRepo repo, ModelMapper mapper) {
 		super();
 		this.repo = repo;
+		this.mapper = mapper;
+	}
+	
+	private ComicDTO mapToDTO(Comic comic) {
+		return this.mapper.map(comic, ComicDTO.class);
 	}
 	
 //	INSERT INTO comic VALUES...
-	public Comic create(Comic comic) {
-		return this.repo.save(comic);
+	public ComicDTO create(Comic comic) {
+		Comic saved= this.repo.save(comic);
+		return this.mapToDTO(saved);
 	}
 
 //	SELECT * FROM comic
-	public List<Comic> read(){
-		return this.repo.findAll();
+	public List<ComicDTO> read() {
+		List<ComicDTO> DTOs = new ArrayList<>();
+		for (Comic comic : this.repo.findAll()) {
+			DTOs.add(this.mapToDTO(comic));
+		}
+		return DTOs;
 	}
-
+	
 //	SELECT FROM comic WHERE id =
-	public Comic read(long id) {
-		return this.repo.findById(id).orElseThrow(() -> new ComicNotFoundException());
+	public ComicDTO read(long id) {
+		Comic found = this.repo.findById(id).orElseThrow(() -> new ComicNotFoundException());
+		return this.mapToDTO(found);
 	}
 	
 //	UPDATE comic SET ....
-	public Comic update(Comic comic, long id) {
+	public ComicDTO update(Comic comic, long id) {
+		
 		Optional<Comic> optComic = this.repo.findById(id);
 		
 		Comic toUpdate = optComic.orElseThrow(() -> new ComicNotFoundException());
@@ -46,7 +62,8 @@ public class ComicService {
 		toUpdate.setCoverArtist(comic.getCoverArtist());
 		toUpdate.setIssue(comic.getIssue());
 		
-		return this.repo.save(toUpdate);
+		Comic updated= this.repo.save(toUpdate);
+		return this.mapToDTO(updated);
 	}
 	
 	

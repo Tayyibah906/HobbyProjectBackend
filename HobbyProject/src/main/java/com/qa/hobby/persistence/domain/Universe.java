@@ -3,6 +3,7 @@ package com.qa.hobby.persistence.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,9 +16,10 @@ public class Universe {
 	@GeneratedValue
 	private Long id;
 
+	@Column
 	private String name;
 
-	@OneToMany(mappedBy = "comic")
+	@OneToMany(mappedBy = "universe")
 	private List<Comic> comics = new ArrayList<>();
 	
 	public Universe(String name) {
