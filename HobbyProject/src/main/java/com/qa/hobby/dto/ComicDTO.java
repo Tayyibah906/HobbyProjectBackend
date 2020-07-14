@@ -25,6 +25,9 @@ public class ComicDTO {
 		this.issue=issue;
 	}
 	
+	public ComicDTO() {
+		
+	}
 	
 	public long getId() {
 		return id;

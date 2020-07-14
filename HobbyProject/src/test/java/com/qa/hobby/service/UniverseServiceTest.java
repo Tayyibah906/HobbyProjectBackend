@@ -13,7 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.modelmapper.ModelMapper;
 
+import com.qa.hobby.dto.UniverseDTO;
 import com.qa.hobby.persistence.domain.Universe;
 import com.qa.hobby.persistence.repo.UniverseRepo;
 
@@ -22,10 +24,16 @@ public class UniverseServiceTest {
 
 	private Universe universe;
 
+	private UniverseDTO universeDTO;
+	
+	
 	private Universe savedUniverse;
 
 	@Mock
 	private UniverseRepo repo;
+	
+	@Mock
+	private ModelMapper mapper;
 
 	@InjectMocks
 	private UniverseService service;
@@ -42,8 +50,9 @@ public class UniverseServiceTest {
 	@Test
 	public void testCreate() {
 		when(this.repo.save(universe)).thenReturn(savedUniverse);
+		when(this.mapper.map(savedUniverse, UniverseDTO.class)).thenReturn(universeDTO);
 
-		assertEquals(savedUniverse, service.create(universe));
+		assertEquals(this.universeDTO, this.service.create(savedUniverse));
 
 		verify(this.repo, Mockito.times(1)).save(universe);
 	}

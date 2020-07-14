@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.modelmapper.ModelMapper;
 
 import com.qa.hobby.persistence.domain.Comic;
 import com.qa.hobby.persistence.repo.ComicRepo;
@@ -28,6 +29,9 @@ public class ComicServiceTest {
 
 	@Mock
 	private ComicRepo repo;
+	
+	@Mock
+	private ModelMapper mapper;
 
 	@InjectMocks
 	private ComicService service;
