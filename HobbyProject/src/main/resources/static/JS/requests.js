@@ -21,7 +21,7 @@ function postComic() {
 
 function getComic() {
     const comicOutput = document.getElementById('comicOutput');
-    axios.get(URL +'/comic/getAll')
+    axios.get(URL +'/comic/readComic')
         .then(res => {
             comicOutput.innerText = "";
             res.data.forEach((comic, i) => {
@@ -61,8 +61,6 @@ function putComic() {
             .then(response => output.innerText = res.comic)
             .catch(error => console.log(error));
     });
-    let updatemsg = document.querySelector(".updatemsg");
-      getMsg(get, updatemsg);
 };
 
 document.getElementById('delete-button').addEventListener("click", function(){
@@ -70,8 +68,6 @@ document.getElementById('delete-button').addEventListener("click", function(){
     .then(response => output.innerText = res.comic)
     .catch(error => console.log(error));
 
-    let deletemsg = document.querySelector(".deletemsg");
-  getMsg(true, deletemsg);
 });
 
 postComic();
