@@ -33,27 +33,27 @@ public class ComicController {
 	}
 	
 
-	@PostMapping("/create")
+	@PostMapping("/createComic")
 	public ResponseEntity<ComicDTO> create(@RequestBody Comic comic) {
 		return new ResponseEntity<ComicDTO>(this.service.create(comic), HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/read/{id}")
+	@GetMapping("/readComic/{id}")
 	public ResponseEntity<ComicDTO> readOne(@PathVariable Long id) {
 		return ResponseEntity.ok(this.service.read(id));
 	}
 
-	@GetMapping("/read")
+	@GetMapping("/readComic")
 	public ResponseEntity<List<ComicDTO>> read() {
 		return new ResponseEntity<List<ComicDTO>>(this.service.read(), HttpStatus.OK);
 	}
 
-	@PutMapping("/update/{id}")
+	@PutMapping("/updateComic/{id}")
 	public ResponseEntity<ComicDTO> update(@PathVariable Long id, @RequestBody Comic comic) {
 		return new ResponseEntity<ComicDTO>(this.service.update(comic, id), HttpStatus.ACCEPTED);
 	}
 
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/deleteComic/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		return (this.service.delete(id) ? new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR)
 				: new ResponseEntity<>(HttpStatus.NO_CONTENT));

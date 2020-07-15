@@ -16,6 +16,10 @@ public class UniverseDTO {
 		this.name=name;
 		this.comic=comic;
 	}
+	
+	public UniverseDTO() {
+		
+	}
 
 	public Long getId() {
 		return id;

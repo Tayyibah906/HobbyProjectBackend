@@ -31,27 +31,27 @@ public class UniverseController {
 		this.service = service;
 	}
 
-	@PostMapping("/create")
+	@PostMapping("/createUniverse")
 	public ResponseEntity<UniverseDTO> create(@RequestBody Universe comic) {
 		return new ResponseEntity<UniverseDTO>(this.service.create(comic), HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/read/{id}")
+	@GetMapping("/readUniverse/{id}")
 	public ResponseEntity<UniverseDTO> readOne(@PathVariable Long id) {
 		return ResponseEntity.ok(this.service.read(id));
 	}
 
-	@GetMapping("/read")
+	@GetMapping("/readUniverse")
 	public ResponseEntity<List<UniverseDTO>> read() {
 		return new ResponseEntity<List<UniverseDTO>>(this.service.read(), HttpStatus.OK);
 	}
 
-	@PutMapping("/update/{id}")
+	@PutMapping("/updateUniverse/{id}")
 	public ResponseEntity<UniverseDTO> update(@PathVariable Long id, @RequestBody Universe comic) {
 		return new ResponseEntity<UniverseDTO>(this.service.update(comic, id), HttpStatus.ACCEPTED);
 	}
 
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/deleteUniverse/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		return (this.service.delete(id) ? new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR) : new ResponseEntity<>(HttpStatus.NO_CONTENT));
 	}

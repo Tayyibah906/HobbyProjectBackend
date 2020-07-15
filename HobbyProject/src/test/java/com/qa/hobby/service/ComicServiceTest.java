@@ -13,7 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.modelmapper.ModelMapper;
 
+import com.qa.hobby.dto.ComicDTO;
 import com.qa.hobby.persistence.domain.Comic;
 import com.qa.hobby.persistence.repo.ComicRepo;
 
@@ -21,7 +23,10 @@ import com.qa.hobby.persistence.repo.ComicRepo;
 @RunWith(MockitoJUnitRunner.class)
 public class ComicServiceTest {
 
-
+	private Comic comic;
+	
+	private ComicDTO comicDTO;
+	
 	private final Comic COMIC = new Comic("Batman Adventures", "John smith", "Claire smith", "Moo", 100);
 
 	private Comic savedComic;
@@ -29,21 +34,27 @@ public class ComicServiceTest {
 	@Mock
 	private ComicRepo repo;
 
+	@Mock
+	private ModelMapper mapper;
+	
 	@InjectMocks
 	private ComicService service;
-
+	
 	@Before
 	public void init() {
-		this.savedComic = new Comic (COMIC.getTitle(),COMIC.getWriter(), COMIC.getCoverArtist(), 
+		this.comic = new Comic();
+		this.savedComic = new Comic (comic.getTitle(),COMIC.getWriter(), COMIC.getCoverArtist(), 
 					COMIC.getPublisher(), COMIC.getIssue());
 		this.savedComic.setId(1L);
+		this.comicDTO = new ModelMapper().map(savedComic, ComicDTO.class);
 	}
 
 	@Test
 	public void testCreate() {
-		when(this.repo.save(COMIC)).thenReturn(savedComic);
+		when(this.repo.save(comic)).thenReturn(savedComic);
+		when(this.mapper.map(savedComic, ComicDTO.class)).thenReturn(comicDTO);
 
-		assertEquals(savedComic, service.create(COMIC));
+		assertEquals(this.comicDTO, this.service.create(comic));
 
 		verify(this.repo, Mockito.times(1)).save(COMIC);
 	}

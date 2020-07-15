@@ -13,7 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.modelmapper.ModelMapper;
 
+import com.qa.hobby.dto.UniverseDTO;
 import com.qa.hobby.persistence.domain.Universe;
 import com.qa.hobby.persistence.repo.UniverseRepo;
 
@@ -21,8 +23,13 @@ import com.qa.hobby.persistence.repo.UniverseRepo;
 public class UniverseServiceTest {
 
 	private Universe universe;
+	
+	private UniverseDTO universeDTO;
 
 	private Universe savedUniverse;
+	
+	@Mock
+	private ModelMapper mapper;
 
 	@Mock
 	private UniverseRepo repo;
@@ -34,16 +41,18 @@ public class UniverseServiceTest {
 	public void init() {
 		this.universe = new Universe();
 		this.universe.setName("Marvel");
-		this.savedUniverse = new Universe();
+		this.savedUniverse = universe;
 		this.savedUniverse.setName(this.universe.getName());
 		this.savedUniverse.setId(1L);
+		this.universeDTO = new ModelMapper().map(savedUniverse, UniverseDTO.class);
 	}
 
 	@Test
 	public void testCreate() {
 		when(this.repo.save(universe)).thenReturn(savedUniverse);
-
-		assertEquals(savedUniverse, service.create(universe));
+		when(this.mapper.map(savedUniverse, UniverseDTO.class)).thenReturn(universeDTO);
+		
+		assertEquals(this.universeDTO, this.service.create(savedUniverse));
 
 		verify(this.repo, Mockito.times(1)).save(universe);
 	}
@@ -51,6 +60,7 @@ public class UniverseServiceTest {
 	@Test
 	public void testUpdate() {
 		Mockito.when(this.repo.findById(savedUniverse.getId())).thenReturn(Optional.of(savedUniverse));
+		when(this.mapper.map(savedUniverse, UniverseDTO.class)).thenReturn(universeDTO);
 
 		Universe newUniverse = new Universe();
 		newUniverse.setName("DC");
@@ -59,6 +69,9 @@ public class UniverseServiceTest {
 		newUniverseWthID.setName(newUniverse.getName());
 		newUniverseWthID.setId(savedUniverse.getId());
 
+		Mockito.when(this.repo.findById(savedUniverse.getId())).thenReturn(Optional.of(savedUniverse));
+		when(this.mapper.map(savedUniverse, UniverseDTO.class)).thenReturn(universeDTO);
+		
 		Mockito.when(this.repo.save(newUniverseWthID)).thenReturn(newUniverseWthID);
 
 		assertEquals(newUniverseWthID, this.service.update(newUniverse, savedUniverse.getId()));
