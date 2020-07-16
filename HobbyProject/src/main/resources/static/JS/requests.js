@@ -1,10 +1,8 @@
-const params = new URLSearchParams(window.location.search);
 const URL = '';
-//http://localhost:8080
-
-function postComic() {
-    document.getElementById("comicForm").addEventListener("submit", function(event){
-      debugger
+// http://localhost:8080
+(function () {
+    const comicOutput = document.getElementById('comicOutput');
+    document.getElementById("comicForm").addEventListener("submit", function (event) {
         event.preventDefault();
         const comic = {};
         comic.title = this.title.value;
@@ -13,43 +11,40 @@ function postComic() {
         comic.publisher = this.publisher.value;
         comic.issue = this.issue.value;
         axios.post(URL + "/comic/createComic", comic)
-            .then(response => output.innerText = res.comic)
+            .then(res => comicOutput.innerText = res.data)
             .catch(error => console.log(error));
     });
-    
-};
 
-function getComic() {
-    const comicOutput = document.getElementById('comicOutput');
-    axios.get(URL +'/comic/readComic')
-        .then(res => {
-            comicOutput.innerText = "";
-            res.data.forEach((comic, i) => {
-                const comicDiv = makeElement('div', '', comicOutput);
-                comicDiv.id = 'comic' + i;
-                comicDiv.addEventListener('click', function () {
-                    window.location = './index.html?id=' + comic.id;
+
+    document.getElementById("readComicsButton").addEventListener("click", function () {
+        axios.get(URL + '/comic/readComic')
+            .then(res => {
+                comicOutput.innerText = "";
+                res.data.forEach((comic, i) => {
+                    const comicDiv = makeElement('div', '', comicOutput);
+                    comicDiv.id = 'comic' + i;
+                    comicDiv.addEventListener('click', function () {
+                        window.location = './index.html?id=' + comic.id;
+                    });
+                    makeElement('h6', comic.title, comicDiv);
+                    makeElement('p', `writer: ${comic.writer}`, comicDiv);
+                    makeElement('p', `Cover Artist: ${comic.artist}`, comicDiv);
+                    makeElement('p', `publisher: ${comic.publisher}`, comicDiv);
+                    makeElement('p', `issue: ${comic.issue}`, comicDiv);
+                    makeElement('p', `universe: ${comic.universe}`, comicDiv);
                 });
-                makeElement('h6', comic.title, comicDiv);
-                makeElement('p', `writer: ${comic.writer}`, comicDiv);
-                makeElement('p', `Cover Artist: ${comic.artist}`, comicDiv);
-                makeElement('p', `publisher: ${comic.publisher}`, comicDiv);
-                makeElement('p', `issue: ${comic.issue}`, comicDiv);
-                makeElement('p', `universe: ${comic.universe}`, comicDiv);
-            });
-        })
-        .catch(err => console.log(err));
-};
+            })
+            .catch(err => console.log(err));
+    });
 
-function makeElement(eleType, text, appendTo) {
-    const element = document.createElement(eleType);
-    element.innerText = text;
-    appendTo.appendChild(element);
-    return element;
-};
+    function makeElement(eleType, text, appendTo) {
+        const element = document.createElement(eleType);
+        element.innerText = text;
+        appendTo.appendChild(element);
+        return element;
+    };
 
-function putComic() {
-    document.getElementById("comicForm").addEventListener("submit", function(event){
+    document.getElementById("comicForm").addEventListener("submit", function (event) {
         event.preventDefault();
         const comic = {};
         comic.title = this.title.value;
@@ -58,18 +53,13 @@ function putComic() {
         comic.publisher = this.publisher.value;
         comic.issue = this.issue.value;
         axios.put(URL + "/comic/updateComic", comic)
-            .then(response => output.innerText = res.comic)
+            .then(res => comicOutput.innerText = res.data)
             .catch(error => console.log(error));
     });
-};
 
-document.getElementById('delete-button').addEventListener("click", function(){
-    axios.delete(URL + "/comic/deleteComic" + document.getElementById("input-delete").value)
-    .then(response => output.innerText = res.comic)
-    .catch(error => console.log(error));
-
-});
-
-postComic();
-getComic();
-putComic();
+    document.getElementById('delete-button').addEventListener("click", function () {
+        axios.delete(URL + "/comic/deleteComic" + document.getElementById("input-delete").value)
+            .then(res => output.innerText = res.data)
+            .catch(error => console.log(error));
+    });
+})();

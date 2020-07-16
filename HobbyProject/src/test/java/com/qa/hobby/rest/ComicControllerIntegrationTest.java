@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,72 +29,70 @@ import com.qa.hobby.persistence.repo.ComicRepo;
 @AutoConfigureMockMvc
 public class ComicControllerIntegrationTest {
 
+	@Autowired
+	private MockMvc mockMVC;
 
-		@Autowired
-		private MockMvc mockMVC;
+	private Comic comic;
 
-		private Comic comic;
+	private Comic savedComic;
 
-		private Comic savedComic;
+	@Autowired
+	private ObjectMapper mapper;
 
-		@Autowired
-		private ObjectMapper mapper;
+	@Autowired
+	private ComicRepo repo;
 
-		@Autowired
-		private ComicRepo repo;
+	private Long id;
 
-		private Long id;
+	@Before
+	public void init() {
+		this.repo.deleteAll();
 
-		@Before
-		public void init() {
-			this.repo.deleteAll();
+		this.comic = new Comic();
 
-			this.comic = new Comic();
+		this.savedComic = this.repo.save(this.comic);
 
-			this.savedComic = this.repo.save(this.comic);
+		this.id = this.savedComic.getId() + 1;
+	}
 
-			this.id = this.savedComic.getId() + 1;
-		}
+	@Test
+	public void testCreate() throws Exception {
 
+		this.savedComic.setId(id);
 
-		@Test
-		public void testCreate() throws Exception {
+		MockHttpServletRequestBuilder reqBuilder = MockMvcRequestBuilders.post("/comic/create");
+		reqBuilder.contentType(MediaType.APPLICATION_JSON);
+		reqBuilder.accept(MediaType.APPLICATION_JSON);
+		reqBuilder.content(this.mapper.writeValueAsString(comic));
 
-			this.savedComic.setId(id);
+		ResultMatcher matchStatus = MockMvcResultMatchers.status().isCreated();
+		ResultMatcher matchContent = MockMvcResultMatchers.content().json(this.mapper.writeValueAsString(savedComic));
 
-			MockHttpServletRequestBuilder reqBuilder = MockMvcRequestBuilders.post("/comic/create");
-			reqBuilder.contentType(MediaType.APPLICATION_JSON);
-			reqBuilder.accept(MediaType.APPLICATION_JSON);
-			reqBuilder.content(this.mapper.writeValueAsString(comic));
+		this.mockMVC.perform(reqBuilder).andExpect(matchStatus).andExpect(matchContent);
+	}
 
-			ResultMatcher matchStatus = MockMvcResultMatchers.status().isCreated();
-			ResultMatcher matchContent = MockMvcResultMatchers.content().json(this.mapper.writeValueAsString(savedComic));
+	@Test
+	public void testCreateBuilder() throws Exception {
+		this.mockMVC
+				.perform(post("/comic/create").contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON).content(this.mapper.writeValueAsString(comic)))
+				.andExpect(status().isCreated()).andExpect(content().json(this.mapper.writeValueAsString(savedComic)));
 
-			this.mockMVC.perform(reqBuilder).andExpect(matchStatus).andExpect(matchContent);
-		}
+	}
 
-		@Test
-		public void testCreateBuilder() throws Exception {
-			this.mockMVC
-					.perform(post("/comic/create").contentType(MediaType.APPLICATION_JSON)
-							.accept(MediaType.APPLICATION_JSON).content(this.mapper.writeValueAsString(comic)))
-					.andExpect(status().isCreated()).andExpect(content().json(this.mapper.writeValueAsString(savedComic)));
+	@Test
+	public void testReadOneSuccess() throws Exception {
+		this.mockMVC
+				.perform(get("/comic/read/" + this.savedComic.getId()).contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andExpect(content().json(this.mapper.writeValueAsString(savedComic)));
+	}
 
-		}
-
-		@Test
-		public void testReadOneSuccess() throws Exception {
-			this.mockMVC
-					.perform(get("/comic/read/" + this.savedComic.getId()).contentType(MediaType.APPLICATION_JSON)
-							.accept(MediaType.APPLICATION_JSON))
-					.andExpect(status().isOk()).andExpect(content().json(this.mapper.writeValueAsString(savedComic)));
-		}
-
-		@Test
-		public void testReadOneFailure() throws Exception {
-			this.mockMVC.perform(
-					get("/comic/read/999999").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-					.andExpect(status().isNotFound());
-		}
+	@Test
+	public void testReadOneFailure() throws Exception {
+		this.mockMVC.perform(
+				get("/comic/read/999999").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound());
+	}
 
 }
