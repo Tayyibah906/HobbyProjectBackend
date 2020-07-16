@@ -16,6 +16,7 @@ This project was built with the SpringTools Suite version (4.7.0)
 What things you need to install the software:
 •You need to have Spring Tools Suite installed
 •To run it locally you need MySQL 5.7 or 8
+•mvn - :run
 
 
 ##Installing
