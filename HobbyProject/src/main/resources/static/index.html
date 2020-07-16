@@ -1,213 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>project2</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
 
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-  integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
-<link rel="stylesheet" href="./style.css" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>project2</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
 
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-      <a class="navbar-brand" href="#">ComicShare</a>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">ComicShare</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#">universe</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="jumbotron">
+      <div class="container text-center">
+        <h1>Welcome to my comic book collection</h1>
+        <p>Some text about comics coming soon</p>
+      </div>
     </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">universe</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
 
-<div class="jumbotron">
-  <div class="container text-center">
-    <h1>Welcome to my comic book collection</h1>      
-    <p>Some text about comics coming soon</p>
-  </div>
-</div>
-  
-<div class="container-fluid bg-3 text-center">    
-  <h3>My comics</h3><br>
-  <div class="row">
-    <div id="comicOutput" class="col-sm-3">
-      <p>Create</p>
-      <form id='comicForm'>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="comicTitle">Title</label>
-            <input id="comicTitle" name="title" type="text" class="form-control" >
+    <div class="container-fluid bg-3 text-center">
+      <h3>My comics</h3><br>
+
+      <div id="comicOutput"></div>
+      <div class="row">
+        <div class="col-sm-3">
+          <p>Create</p>
+          <form id='comicForm'>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="comicTitle">Title</label>
+                <input id="comicTitle" name="title" type="text" class="form-control">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="comicWriter">Writer</label>
+                <input id="comicWriter" name="writer" type="text" class="form-control">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="comicArtist">Cover Artist</label>
+                <input id="comicArtist" name="artist" type="text" class="form-control">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="comicPublisher">publisher</label>
+                <input id="comicPublisher" name="publisher" type="text" class="form-control">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="comicIssue">Issue</label>
+                <input id="comicIssue" name="issue" type="number" class="form-control">
+              </div>
+              <div class="form-group col-md-8">
+                <label for="comicUniverse">Universe</label>
+                <select id="comicUniverse" class="form-control">
+                  <option selected>Choose...</option>
+                  <option>DC Universe</option>
+                  <option>Marvel</option>
+                  <option>Archie Multiverse</option>
+                  <option>Amalgam Universe</option>
+                  <option>DragonBall Multiverse</option>
+                  <option>Hasbro Universe</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-success">Insert</button>
+          </form>
+        </div>
+
+
+        <div class="col-sm-3">
+          <p>Read</p><br><br><br>
+          <br><br><br><button id="readComicsButton" type="button" class="btn btn-info">Read</button>
+        </div>
+
+
+        <div class="col-sm-3">
+          <p>Update</p>
+          <label for="inputId">Comic ID</label>
+          <input id="inputId" type="text" class="form-control" placeholder="Enter ID"><br>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="comicTitle">Title</label>
+              <input id="comicTitle" name="title" type="text" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="comicWriter">Writer</label>
+              <input id="comicWriter" name="writer" type="text" class="form-control">
+            </div>
           </div>
-          <div class="form-group col-md-6">
-            <label for="comicWriter">Writer</label>
-            <input id="comicWriter" name="writer" type="text" class="form-control" >
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="comicArtist">Cover Artist</label>
+              <input id="comicArtist" name="artist" type="text" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="comicPublisher">publisher</label>
+              <input id="comicPublisher" name="publisher" type="text" class="form-control">
+            </div>
           </div>
-        </div>
-        <div class="form-row">
-         <div class="form-group col-md-6">
-          <label for="comicArtist">Cover Artist</label>
-          <input id="comicArtist" name="artist" type="text" class="form-control" >
-         </div>
-         <div class="form-group col-md-6">
-          <label for="comicPublisher">publisher</label>
-          <input id="comicPublisher" name="publisher" type="text" class="form-control" >
-         </div>
-       </div>
-        <div class="form-row">
-          <div class="form-group col-md-4">
-            <label for="comicIssue">Issue</label>
-            <input id="comicIssue" name="issue" type="number" class="form-control" >
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="comicIssue">Issue</label>
+              <input id="comicIssue" type="number" class="form-control">
+            </div>
+            <div class="form-group col-md-8">
+              <label for="comicUniverse">Universe</label>
+              <select id="comicUniverse" class="form-control">
+                <option selected>Choose...</option>
+                <option>DC Universe</option>
+                <option>Marvel</option>
+                <option>Archie Multiverse</option>
+                <option>Amalgam Universe</option>
+                <option>DragonBall Multiverse</option>
+                <option>Hasbro Universe</option>
+              </select>
+            </div>
           </div>
-          <div class="form-group col-md-8">
-            <label for="comicUniverse">Universe</label>
-            <select id="comicUniverse" class="form-control">
-              <option selected>Choose...</option>
-              <option>DC Universe</option>
-              <option>Marvel</option>
-              <option>Archie Multiverse</option>
-              <option>Amalgam Universe</option>
-              <option>DragonBall Multiverse</option>
-              <option>Hasbro Universe</option>
-            </select>
-          </div>
+          <button type="submit" class="btn btn-warning">Update</button>
+          </form>
         </div>
-        <button type="submit" class="btn btn-success">Insert</button>
-      </form>
-    </div>
 
-
-    <div class="col-sm-3"> 
-    <p>Read</p><br><br><br>
-    <br><br><br><button onclick ="getComic()",type="submit" class="btn btn-info">Read</button>
-    </div>
-
-
-    <div class="col-sm-3"> 
-      <p>Update</p>
-      <label for="inputId">Comic ID</label>
-      <input id="inputId" type="text" class="form-control"  placeholder="Enter ID"><br>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="comicTitle">Title</label>
-          <input id="comicTitle" name="title" type="text" class="form-control" >
-        </div>
-        <div class="form-group col-md-6">
-          <label for="comicWriter">Writer</label>
-          <input id="comicWriter" name="writer" type="text" class="form-control" >
+        <div class="col-sm-3">
+          <p>Delete</p><br>
+          <br><label for="inputId">Comic ID</label>
+          <input id="input-delete" type="text" class="form-control" name=inputId placeholder="Enter ID"><br>
+          <button id="delete-button" onclick="deleteComic();" type="submit" class="btn btn-danger">Delete</button>
         </div>
       </div>
-      <div class="form-row">
-       <div class="form-group col-md-6">
-        <label for="comicArtist">Cover Artist</label>
-        <input id="comicArtist" name="artist" type="text" class="form-control" >
-       </div>
-       <div class="form-group col-md-6">
-        <label for="comicPublisher">publisher</label>
-        <input id="comicPublisher" name="publisher" type="text" class="form-control" >
-       </div>
-     </div>
-      <div class="form-row">
-        <div class="form-group col-md-4">
-          <label for="comicIssue">Issue</label>
-          <input id="comicIssue" type="number" class="form-control" >
+
+    </div><br>
+
+    <div class="jumbotron">
+      <div class="container text-center">
+
+      </div>
+    </div>
+
+    <div class="container-fluid bg-3 text-center">
+      <h3>Universes</h3><br>
+
+
+      <div class="row">
+        <div class="col-sm-3">
+          <p>Create</p><br>
+          <label for="UniverseName">Universe Name</label>
+          <input type="text" class="form-control" id="Universe-Name" placeholder="Enter Name"><br>
+          <button type="submit" class="btn btn-success">Insert</button>
         </div>
-        <div class="form-group col-md-8">
-          <label for="comicUniverse">Universe</label>
-          <input id="comicUniverse" name="universe" type="text" class="form-control" >
+
+        <div class="col-sm-3">
+          <p>Read</p><br><br><br>
+          <br><br><button onclick="getUniverse();" type="submit" class="btn btn-info">Read</button>
+        </div>
+
+        <div class="col-sm-3">
+          <p>Update</p><br>
+          <label for="UniverseId">Universe ID</label>
+          <input type="text" class="form-control" id="UniverseId" placeholder="Enter ID"><br>
+          <label for="UniverseName">Universe Name</label>
+          <input type="text" class="form-control" id="Universe-Name" placeholder="Enter Name"><br>
+          <button onclick="putUniverse();" type="submit" class="btn btn-warning">Update</button>
+        </div>
+
+        <div class="col-sm-3">
+          <p>Delete</p><br>
+          <label for="UniverseId">Universe ID</label>
+          <input type="text" class="form-control" id="UniverseId" placeholder="Enter ID"><br>
+          <button onclick="deleteUniverse();" type="submit" class="btn btn-danger">Delete</button>
         </div>
       </div>
-      <button type="submit" class="btn btn-warning">Update</button>
-    </form>
-    </div>
+    </div><br>
+    </div><br><br>
 
-    <div class="col-sm-3">
-      <p>Delete</p><br>
-      <br><label for="inputId">Comic ID</label>
-      <input id="input-delete" type="text" class="form-control"  name=inputId placeholder="Enter ID"><br>
-      <button id="delete-button" onclick="deleteComic();" type="submit" class="btn btn-danger">Delete</button>
-    </div>
-  </div>
-</div><br>
-
-<div class="jumbotron">
-  <div class="container text-center">
-  </div>
-</div>
-
-<div class="container-fluid bg-3 text-center">    
-    <h3>Universes</h3><br>
-
-    
-  <div class="row">
-    <div class="col-sm-3">
-      <p>Create</p><br>
-      <label for="UniverseName">Universe Name</label>
-      <input type="text" class="form-control" id="Universe-Name" placeholder="Enter Name"><br>
-      <button type="submit" class="btn btn-success">Insert</button>
-    </div>
-
-    <div class="col-sm-3"> 
-        <p>Read</p><br><br><br>
-        <br><br><button onclick="getUniverse();" type="submit" class="btn btn-info">Read</button>
-      </div>
-
-      <div class="col-sm-3"> 
-        <p>Update</p><br>
-        <label for="UniverseId">Universe ID</label>
-        <input type="text" class="form-control" id="UniverseId" placeholder="Enter ID"><br>
-        <label for="UniverseName">Universe Name</label>
-      <input type="text" class="form-control" id="Universe-Name" placeholder="Enter Name"><br>
-        <button onclick="putUniverse();"type="submit" class="btn btn-warning">Update</button>
-      </div>
-
-      <div class="col-sm-3">
-        <p>Delete</p><br>
-        <label for="UniverseId">Universe ID</label>
-        <input type="text" class="form-control" id="UniverseId" placeholder="Enter ID"><br>
-        <button onclick="deleteUniverse();"type="submit" class="btn btn-danger">Delete</button>
-      </div>
-    </div>
-  </div><br>
-</div><br><br>
-
- <!-- Labels -->
- <!-- <div class="w-100 btn btn-success insertmsg">Data Inserted Successfully...!</div>
+    <!-- Labels -->
+    <!-- <div class="w-100 btn btn-success insertmsg">Data Inserted Successfully...!</div>
  <div class="w-100 btn btn-warning updatemsg">Data Updated..! Refresh Database To See Result</div>
  <div class="w-100 btn btn-danger deletemsg">Data Deleted..!</div> -->
 
-<footer class="container-fluid text-center">
-  <p>ComicShare</p>
-</footer>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-</script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
-<<<<<<< HEAD
-<script src="./JS/index.js"></script>
-<script src="./JS/requests.js"></script>
-=======
-<script src="js/index.js"></script>
-<script src="js/requests.js"></script>
->>>>>>> 71d5ef02330a1fca406b8a1f397d42e3842491f6
+    <footer class="container-fluid text-center">
+      <p>ComicShare</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
+    <script src="./JS/index.js"></script>
+    <script src="./JS/requests.js"></script>
 
-</body>
+  </body>
+
 </html>
