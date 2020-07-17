@@ -48,9 +48,6 @@ while Nexus would be used as a private artefact repository to hold the project.
 For this project sonarqube was used to inspect the quality of the code.
 
 
-##Built With
-•Maven - Dependency Management
-
 ##Versioning
 
 For this project Git was used for versioning
