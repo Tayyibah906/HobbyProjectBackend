@@ -1,18 +1,28 @@
 
      
 .navbar {
+  background-color: #b3c2da;
+  background-size:contain;
+  height: auto;
+  width: auto;
   margin-bottom: 10;
   border-radius: 10;
 }
 
+
+
+
 .jumbotron{
-  background-image: url("comicCollection\img\jla_avengers_busiek_perez.jpg");
-  background-size:cover;
-  height: fit-content;
+  background-image: url("./img/comic-speech-bubble-cartoon-comic-book-text-clouds-comic-pop-art-book-pow-oops-wow-boom-exclamation-signs-vector-comic-speech-166284983.jpg");
+  background-color: #ffffff;
+  background-size:auto;
+  height: auto;
+  width: auto;
 }
 
+
 .container-fluid {
-  background-image: url("comicCollection\img\beautiful-colorful-comic-book-background-illustration.jpg");
+  background-color: #ffffff;
   background-size:cover;
   height: fit-content;
 }
@@ -20,5 +30,23 @@
 
 footer {
   background-color: #2aaabb;
+  background-image: url("./img/comic-speech-bubble-cartoon-comic-book-text-clouds-comic-pop-art-book-pow-oops-wow-boom-exclamation-signs-vector-comic-speech-166284983.jpg");
   padding: 25px;
+}
+
+body {
+ 
+  height: auto;
+  width: auto;
+  background-color: #b3c2da;
+ }
+
+ h1 {
+  background-color: white; 
+  color: black;
+}
+
+p {
+  background-color: white; 
+  color: black;
 }

@@ -1,74 +1,67 @@
 package com.qa.hobby.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import com.qa.hobby.dto.UniverseDTO;
-import com.qa.hobby.exceptions.ComicNotFoundException;
+import com.qa.hobby.exceptions.UniverseNotFoundException;
+import com.qa.hobby.persistence.domain.Comic;
 import com.qa.hobby.persistence.domain.Universe;
-
+import com.qa.hobby.persistence.repo.ComicRepo;
 import com.qa.hobby.persistence.repo.UniverseRepo;
 
 @Service
 public class UniverseService {
 
 	private UniverseRepo repo;
-	private ModelMapper mapper;
-	
-	public UniverseService(UniverseRepo repo, ModelMapper mapper) {
-		super();
+
+	private ComicRepo comicRepo;
+
+	private Mapper<Universe, UniverseDTO> mapper;
+
+	@Autowired
+	public UniverseService(UniverseRepo repo, ComicRepo comicRepo, ModelMapper mapper) {
 		this.repo = repo;
-		this.mapper = mapper;
-	}
-	
-	private UniverseDTO mapToDTO(Universe universe) {
-		return this.mapper.map(universe, UniverseDTO.class);
-	}
-	
-//	INSERT INTO universe VALUES...
-	public UniverseDTO create(Universe universe) {
-		Universe saved= this.repo.save(universe);
-		return this.mapToDTO(saved);
+		this.comicRepo = comicRepo;
+		this.mapper = (Universe universe) -> mapper.map(universe, UniverseDTO.class);
 	}
 
-//	SELECT * FROM universe
-	public List<UniverseDTO> read() {
-		List<UniverseDTO> DTOs = new ArrayList<>();
-		for (Universe universe : this.repo.findAll()) {
-			DTOs.add(this.mapToDTO(universe));
+
+	public UniverseDTO createUniverse(Universe universe) {
+		return this.mapper.mapToDTO(this.repo.save(universe));
+	}
+
+	public boolean deleteUniverse(Long id) {
+		if (!this.repo.existsById(id)) {
+			throw new UniverseNotFoundException();
 		}
-		return DTOs;
-	}
-	
-//	SELECT FROM universe WHERE id =
-	public UniverseDTO read(long id) {
-		Universe found = this.repo.findById(id).orElseThrow(() -> new ComicNotFoundException());
-		return this.mapToDTO(found);
-	}
-	
-//	UPDATE universe SET ....
-	public UniverseDTO update(Universe universe, long id) {
-		
-		Optional<Universe> optUniverse = this.repo.findById(id);
-		
-		Universe toUpdate = optUniverse.orElseThrow(() -> new ComicNotFoundException());
-		
-		toUpdate.setName(universe.getName());
-		
-		Universe updated= this.repo.save(toUpdate);
-		return this.mapToDTO(updated);
-	}
-	
-	
-//	DELETE FROM universe WHERE id = 
-	public boolean delete(long id) {
 		this.repo.deleteById(id);
 		return this.repo.existsById(id);
 	}
-}
 
+	public UniverseDTO findUniverseByID(Long id) {
+		return this.mapper.mapToDTO(this.repo.findById(id).orElseThrow(() -> new UniverseNotFoundException()));
+	}
+
+	public List<UniverseDTO> readUniverses() {
+		return this.repo.findAll().stream().map(this.mapper::mapToDTO).collect(Collectors.toList());
+	}
+
+	public UniverseDTO updateUniverse(Universe comic, Long id) {
+		Universe toUpdate = this.repo.findById(id).orElseThrow(() -> new UniverseNotFoundException());
+		toUpdate.setName(comic.getName());
+		return this.mapper.mapToDTO(this.repo.save(toUpdate));
+	}
+
+	public UniverseDTO addComicToUniverse(Long id, Comic comic) {
+		Universe toUpdate = this.repo.findById(id).orElseThrow(() -> new UniverseNotFoundException());
+		Comic newComic = this.comicRepo.save(comic);
+		toUpdate.getcomics().add(newComic);
+		return this.mapper.mapToDTO(this.repo.saveAndFlush(toUpdate));
+	}
+
+}

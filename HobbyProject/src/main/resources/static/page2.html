@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>HobbyProject</title>
+    <title>project2</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
 
@@ -24,7 +24,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="./index.html">Menu</a>
+          <a class="navbar-brand" href="#">Menu</a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav">
@@ -37,26 +37,18 @@
 
     <div class="jumbotron">
       <div class="container text-center">
-        <h1>Welcome to your comic book collection</h1>
-        <p>Enter your collection below</p>
+        <h1>Welcome to your Universe collection</h1>
+        <p>Enter your Universe below</p>
       </div>
     </div>
     <div class="container-fluid bg-3 text-center">
-      <h3>My Comics</h3><br>
+      <h3>My Universes</h3><br>
 
       <div class="row">
         <div id="create" class="col-sm-3">
           <p>Create</p>
-          <label for="createTitle">Title: </label>
-          <input id="createTitle" class="form-control" name="title" />
-          <label for="createWriter">Writer: </label>
-          <input id="createWriter" class="form-control" name="writer" />
-          <label for="createPublisher">publisher: </label>
-          <input id="createPublisher" class="form-control" name="publisher" />
-          <label for="createIssue">Issue: </label>
-          <input id="createIssue" class="form-control" name="issue" />
-          <label for="createUniverse">Universe: </label>
-          <input id="createUniverse" class="form-control" name="universe" /><br>
+          <label for="createName">Name: </label>
+          <input id="createName" class="form-control" name="name" /><br>
           <button type="button" id="createButton" class="btn btn-success">Create</button>
           <pre id="createOutput"></pre>
         </div>
@@ -70,29 +62,21 @@
 
 
         <div id="update" class="col-sm-3">
-          <p>Update</p><br>
-          <form id='updateForm' >
-          <label for="updateInput">Comic ID</label>
-          <input id="updateInput" name="comicID" type="text" class="form-control" placeholder="Enter ID"><br>
-          <label for="updateTitle">Title: </label>
-          <input id="updateTitle" class="form-control" name="title" />
-          <label for="updateWriter">Writer: </label>
-          <input id="updateWriter" class="form-control" name="writer" />
-          <label for="updatePublisher">publisher: </label>
-          <input id="updatePublisher" class="form-control" name="publisher" />
-          <label for="updateIssue">Issue: </label>
-          <input id="updateIssue" class="form-control" name="issue" />
-          <label for="createUniverse">Universe: </label>
-          <input id="createUniverse" class="form-control" name="universe" /><br>
-
-          <button id="updateButton" type="submit" class="btn btn-warning">Update</button>
-          </form>
-          <pre id="updateOutput" id="updateButton"></pre>
-        </div>
+            <p>Update</p><br>
+            <form id='updateForm' >
+            <label for="updateInput">Universe ID</label>
+            <input id="updateInput" name="universeID" type="text" class="form-control" placeholder="Enter ID"><br>
+            <label for="updateName">Name: </label>
+            <input id="updateName" class="form-control" name="name" />
+  
+            <button id="updateButton" type="submit" class="btn btn-warning">Update</button>
+            </form>
+            <pre id="updateOutput" id="updateButton"></pre>
+          </div>
 
         <div id="delete" class="col-sm-3">
           <p>Delete</p><br>
-          <label for="deleteInput">Comic ID</label>
+          <label for="deleteInput">Universe ID</label>
           <input id="deleteInput" type="text" class="form-control" placeholder="Enter ID"><br>
           <button id="deleteButton" type="button" class="btn btn-danger">Delete</button>
           <pre id="deleteOutput" id="deleteButton"></pre>
@@ -121,8 +105,7 @@
       </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
     <script src="./JS/index.js"></script>
-    <script src="./JS/Comicrequests.js"></script>
-    <script src="page2.html"></script>
+    <script src="./JS/universeRequests.js"></script>
 
   </body>
 

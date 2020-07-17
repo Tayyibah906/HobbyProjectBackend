@@ -2,6 +2,8 @@ package com.qa.hobby.rest;
 
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,44 +21,45 @@ import com.qa.hobby.dto.ComicDTO;
 import com.qa.hobby.persistence.domain.Comic;
 import com.qa.hobby.service.ComicService;
 
+
+
 @RestController
-@CrossOrigin
 @RequestMapping("/comic")
+@CrossOrigin
 public class ComicController {
 
 	private ComicService service;
-	
+
 	@Autowired
 	public ComicController(ComicService service) {
 		super();
 		this.service = service;
 	}
-	
 
 	@PostMapping("/createComic")
-	public ResponseEntity<ComicDTO> create(@RequestBody Comic comic) {
-		return new ResponseEntity<ComicDTO>(this.service.create(comic), HttpStatus.CREATED);
-	}
-	
-	@GetMapping("/readComic/{id}")
-	public ResponseEntity<ComicDTO> readOne(@PathVariable Long id) {
-		return ResponseEntity.ok(this.service.read(id));
-	}
-
-	@GetMapping("/readComic")
-	public ResponseEntity<List<ComicDTO>> read() {
-		return new ResponseEntity<List<ComicDTO>>(this.service.read(), HttpStatus.OK);
-	}
-
-	@PutMapping("/updateComic/{id}")
-	public ResponseEntity<ComicDTO> update(@PathVariable Long id, @RequestBody Comic comic) {
-		return new ResponseEntity<ComicDTO>(this.service.update(comic, id), HttpStatus.ACCEPTED);
+	public ResponseEntity<ComicDTO> createComic(@RequestBody Comic comic) {
+		return new ResponseEntity<ComicDTO>(this.service.createComic(comic), HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/deleteComic/{id}")
-	public ResponseEntity<?> delete(@PathVariable Long id) {
-		return (this.service.delete(id) ? new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR)
-				: new ResponseEntity<>(HttpStatus.NO_CONTENT));
+	public ResponseEntity<?> deleteComic(@PathVariable Long id) {
+		return this.service.deleteComic(id) ? ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+				: new ResponseEntity<String>("DELETED", HttpStatus.NO_CONTENT);
 	}
-	
+
+	@GetMapping("/get/{id}")
+	public ResponseEntity<ComicDTO> getComic(@PathVariable Long id) {
+		return ResponseEntity.ok(this.service.findComicByID(id));
+	}
+
+	@GetMapping("/getAll")
+	public ResponseEntity<List<ComicDTO>> getAllComics() {
+		return ResponseEntity.ok(this.service.readComics());
+	}
+
+	@PutMapping("/updateComic")
+	public ResponseEntity<ComicDTO> updateComic(@PathParam("id") Long id, @RequestBody Comic comic) {
+		return new ResponseEntity<ComicDTO>(this.service.updateComic(comic, id), HttpStatus.ACCEPTED);
+	}
+
 }
