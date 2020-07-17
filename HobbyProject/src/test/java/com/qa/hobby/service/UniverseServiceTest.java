@@ -1,106 +1,113 @@
 package com.qa.hobby.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.qa.hobby.dto.UniverseDTO;
 import com.qa.hobby.persistence.domain.Universe;
-import com.qa.hobby.persistence.repo.UniverseRepo;
+import com.qa.hobby.rest.UniverseController;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class UniverseServiceTest {
+	@InjectMocks
+	private UniverseController controller;
 
-	private Universe universe;
-	
+	@Mock
+	private UniverseService service;
+
+	private List<Universe> universeList;
+
+	private Universe testUniverse;
+
+	private Universe testUniverseWithID;
+
 	private UniverseDTO universeDTO;
 
-	private Universe savedUniverse;
-	
-	@Mock
-	private ModelMapper mapper;
+	final long id = 1L;
 
-	@Mock
-	private UniverseRepo repo;
+	private ModelMapper mapper = new ModelMapper();
 
-	@InjectMocks
-	private UniverseService service;
+	private UniverseDTO mapToDTO(Universe universe) {
+		return this.mapper.map(universe, UniverseDTO.class);
+	}
 
 	@Before
 	public void init() {
-		this.universe = new Universe();
-		this.universe.setName("Marvel");
-		this.savedUniverse = universe;
-		this.savedUniverse.setName(this.universe.getName());
-		this.savedUniverse.setId(1L);
-		this.universeDTO = new ModelMapper().map(savedUniverse, UniverseDTO.class);
+		this.universeList = new ArrayList<>();
+		this.testUniverse = new Universe("Marvel");
+		this.universeList.add(testUniverse);
+		this.testUniverseWithID = new Universe(testUniverse.getName());
+		this.testUniverseWithID.setId(id);
+		this.universeDTO = this.mapToDTO(testUniverseWithID);
 	}
 
 	@Test
-	public void testCreate() {
-		when(this.repo.save(universe)).thenReturn(savedUniverse);
-		when(this.mapper.map(savedUniverse, UniverseDTO.class)).thenReturn(universeDTO);
-		
-		assertEquals(this.universeDTO, this.service.create(savedUniverse));
+	public void createUniverseTest() {
+		when(this.service.createUniverse(testUniverse)).thenReturn(this.universeDTO);
 
-		verify(this.repo, Mockito.times(1)).save(universe);
+		assertEquals(new ResponseEntity<UniverseDTO>(this.universeDTO, HttpStatus.CREATED),
+				this.controller.createUniverse(testUniverse));
+
+		verify(this.service, times(1)).createUniverse(this.testUniverse);
 	}
 
 	@Test
-	public void testUpdate() {
-		Mockito.when(this.repo.findById(savedUniverse.getId())).thenReturn(Optional.of(savedUniverse));
-		when(this.mapper.map(savedUniverse, UniverseDTO.class)).thenReturn(universeDTO);
+	public void deleteUniverseTest() {
+		this.controller.deleteUniverse(id);
 
-		Universe newUniverse = new Universe();
-		newUniverse.setName("DC");
-		
-		Universe newUniverseWthID = new Universe();
-		newUniverseWthID.setName(newUniverse.getName());
-		newUniverseWthID.setId(savedUniverse.getId());
-
-		Mockito.when(this.repo.findById(savedUniverse.getId())).thenReturn(Optional.of(savedUniverse));
-		when(this.mapper.map(savedUniverse, UniverseDTO.class)).thenReturn(universeDTO);
-		
-		Mockito.when(this.repo.save(newUniverseWthID)).thenReturn(newUniverseWthID);
-
-		assertEquals(newUniverseWthID, this.service.update(newUniverse, savedUniverse.getId()));
-
-		Mockito.verify(this.repo, Mockito.times(1)).findById(savedUniverse.getId());
-		Mockito.verify(this.repo, Mockito.times(1)).save(newUniverseWthID);
+		verify(this.service, times(1)).deleteUniverse(id);
 	}
 
 	@Test
-	public void testDeleteFails() {
-		final long ID = 1L;
-		final boolean RESULT = true;
-		Mockito.when(this.repo.existsById(ID)).thenReturn(RESULT);
+	public void findUniverseByIDTest() {
+		when(this.service.findUniverseByID(this.id)).thenReturn(this.universeDTO);
 
-		assertEquals(RESULT, this.service.delete(ID));
+		assertEquals(new ResponseEntity<UniverseDTO>(this.universeDTO, HttpStatus.OK), this.controller.getUniverse(this.id));
 
-		Mockito.verify(this.repo, Mockito.times(1)).existsById(ID);
-
+		verify(this.service, times(1)).findUniverseByID(this.id);
 	}
 
 	@Test
-	public void testDeleteSucceeds() {
-		final long ID = 1L;
-		final boolean RESULT = false;
-		Mockito.when(this.repo.existsById(ID)).thenReturn(RESULT);
+	public void readAllUniversesTest() {
 
-		assertEquals(RESULT, this.service.delete(ID));
+		when(service.readUniverses()).thenReturn(this.universeList.stream().map(this::mapToDTO).collect(Collectors.toList()));
 
-		Mockito.verify(this.repo, Mockito.times(1)).existsById(ID);
+		assertFalse("Controller has found no ducks", this.controller.getAllUniverses().getBody().isEmpty());
+
+		verify(service, times(1)).readUniverses();
+	}
+
+	@Test
+	public void updateUniverseTest() {
+		// given
+		Universe newUniverse = new Universe("Hasbro");
+		Universe updatedUniverse = new Universe(newUniverse.getName());
+		updatedUniverse.setId(this.id);
+
+		when(this.service.updateUniverse(newUniverse, this.id)).thenReturn(this.mapToDTO(updatedUniverse));
+
+		assertEquals(new ResponseEntity<UniverseDTO>(this.mapToDTO(updatedUniverse), HttpStatus.ACCEPTED),
+				this.controller.updateUniverse(this.id, newUniverse));
+
+		verify(this.service, times(1)).updateUniverse(newUniverse, this.id);
 	}
 
 }

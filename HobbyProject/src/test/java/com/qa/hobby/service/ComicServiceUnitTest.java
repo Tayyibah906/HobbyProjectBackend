@@ -1,101 +1,115 @@
 package com.qa.hobby.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.qa.hobby.dto.ComicDTO;
 import com.qa.hobby.persistence.domain.Comic;
-import com.qa.hobby.persistence.repo.ComicRepo;
-
+import com.qa.hobby.rest.ComicController;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ComicServiceTest {
+public class ComicServiceUnitTest {
 
-	private Comic comic;
-	
-	private ComicDTO comicDTO;
-	
-	private final Comic COMIC = new Comic("Batman Adventures", "John smith", "Claire smith", "Moo", 100);
-
-	private Comic savedComic;
-
-	@Mock
-	private ComicRepo repo;
-
-	@Mock
-	private ModelMapper mapper;
-	
 	@InjectMocks
+	private ComicController controller;
+
+	@Mock
 	private ComicService service;
-	
+
+	private List<Comic> comicList;
+
+	private Comic testComic;
+
+	private Comic testComicWithID;
+
+	private ComicDTO comicDTO;
+
+	final long id = 1L;
+
+	private ModelMapper mapper = new ModelMapper();
+
+	private ComicDTO mapToDTO(Comic comic) {
+		return this.mapper.map(comic, ComicDTO.class);
+	}
+
 	@Before
 	public void init() {
-		this.comic = new Comic();
-		this.savedComic = new Comic (comic.getTitle(),COMIC.getWriter(), COMIC.getCoverArtist(), 
-					COMIC.getPublisher(), COMIC.getIssue());
-		this.savedComic.setId(1L);
-		this.comicDTO = new ModelMapper().map(savedComic, ComicDTO.class);
+		this.comicList = new ArrayList<>();
+		this.testComic = new Comic("Avengers", "Marvel", "Sam Grey", 3);
+		this.comicList.add(testComic);
+		this.testComicWithID = new Comic(testComic.getTitle(), testComic.getPublisher(), testComic.getWriter(),
+				testComic.getIssue());
+		this.testComicWithID.setId(id);
+		this.comicDTO = this.mapToDTO(testComicWithID);
 	}
 
 	@Test
-	public void testCreate() {
-		when(this.repo.save(comic)).thenReturn(savedComic);
-		when(this.mapper.map(savedComic, ComicDTO.class)).thenReturn(comicDTO);
+	public void createComicTest() {
+		when(this.service.createComic(testComic)).thenReturn(this.comicDTO);
 
-		assertEquals(this.comicDTO, this.service.create(comic));
+		assertEquals(new ResponseEntity<ComicDTO>(this.comicDTO, HttpStatus.CREATED),
+				this.controller.createComic(testComic));
 
-		verify(this.repo, Mockito.times(1)).save(COMIC);
+		verify(this.service, times(1)).createComic(this.testComic);
 	}
 
 	@Test
-	public void testUpdate() {
-		Mockito.when(this.repo.findById(savedComic.getId())).thenReturn(Optional.of(savedComic));
+	public void deleteComicTest() {
+		this.controller.deleteComic(id);
 
-		Comic newComic = new Comic();
-		Comic newComicWthID = new Comic();
-		newComicWthID.setId(savedComic.getId());
-
-		Mockito.when(this.repo.save(newComicWthID)).thenReturn(newComicWthID);
-
-		assertEquals(newComicWthID, this.service.update(newComic, savedComic.getId()));
-
-		Mockito.verify(this.repo, Mockito.times(1)).findById(savedComic.getId());
-		Mockito.verify(this.repo, Mockito.times(1)).save(newComicWthID);
+		verify(this.service, times(1)).deleteComic(id);
 	}
 
 	@Test
-	public void testDeleteFails() {
-		final long ID = 1L;
-		final boolean RESULT = true;
-		Mockito.when(this.repo.existsById(ID)).thenReturn(RESULT);
+	public void findComicByIDTest() {
+		when(this.service.findComicByID(this.id)).thenReturn(this.comicDTO);
 
-		assertEquals(RESULT, this.service.delete(ID));
+		assertEquals(new ResponseEntity<ComicDTO>(this.comicDTO, HttpStatus.OK), this.controller.getComic(this.id));
 
-		Mockito.verify(this.repo, Mockito.times(1)).existsById(ID);
-
+		verify(this.service, times(1)).findComicByID(this.id);
 	}
 
 	@Test
-	public void testDeleteSucceeds() {
-		final long ID = 1L;
-		final boolean RESULT = false;
-		Mockito.when(this.repo.existsById(ID)).thenReturn(RESULT);
+	public void readAllComicsTest() {
 
-		assertEquals(RESULT, this.service.delete(ID));
+		when(service.readComics()).thenReturn(this.comicList.stream().map(this::mapToDTO).collect(Collectors.toList()));
 
-		Mockito.verify(this.repo, Mockito.times(1)).existsById(ID);
+		assertFalse("Controller has found no ducks", this.controller.getAllComics().getBody().isEmpty());
+
+		verify(service, times(1)).readComics();
+	}
+
+	@Test
+	public void updateComicTest() {
+		// given
+		Comic newComic = new Comic("Prof.Green", "Harbro", "Melissa White", 3);
+		Comic updatedComic = new Comic(newComic.getTitle(), newComic.getPublisher(), newComic.getWriter(),
+				newComic.getIssue());
+		updatedComic.setId(this.id);
+
+		when(this.service.updateComic(newComic, this.id)).thenReturn(this.mapToDTO(updatedComic));
+
+		assertEquals(new ResponseEntity<ComicDTO>(this.mapToDTO(updatedComic), HttpStatus.ACCEPTED),
+				this.controller.updateComic(this.id, newComic));
+
+		verify(this.service, times(1)).updateComic(newComic, this.id);
 	}
 
 }

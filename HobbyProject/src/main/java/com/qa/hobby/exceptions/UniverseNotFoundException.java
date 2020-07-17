@@ -11,6 +11,6 @@ public class UniverseNotFoundException extends EntityNotFoundException {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2591687720244290021L;
 
 }

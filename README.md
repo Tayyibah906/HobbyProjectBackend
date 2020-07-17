@@ -9,6 +9,7 @@ The project is designed to let users: insert, read, update and delete entries.
 
 A copy of the project can be found at git clone https://github.com/Tayyibah906/HobbyProjectBackend
 for you to download on your local machine for development and testing purposes. 
+Some more documentation can be found at http://localhost:8080/swagger-ui.html once the project has been downloaded and run.
 This project was built with the SpringTools Suite version (4.7.0)
 
 ##Prerequisites
